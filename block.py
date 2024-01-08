@@ -35,3 +35,6 @@ class Block:
 
     def turn(self):
         self.matrix =  # повернуть матрицу
+
+    def down(self):
+        self.matrix = # опустить блок
