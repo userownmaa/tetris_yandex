@@ -44,7 +44,7 @@ class Game:
         field = Field()
         field.draw_field(screen)
         # рандомно выбрать форму
-        block = ActiveBlock("O", self.all_sprites, self.active_block_group)
+        block = ActiveBlock("I", self.all_sprites, self.active_block_group)
         self.all_sprites.draw(screen)
 
 
