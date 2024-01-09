@@ -21,6 +21,7 @@ def main():
                 running = False
         game.run_game(screen)
         pygame.display.flip()
+    # <- финальное окно с итогами
     game.terminate()
 
 

@@ -1,5 +1,7 @@
 import sys
 import pygame
+
+from active_block import ActiveBlock
 from constant import Constant
 from field import Field
 from image import Image
@@ -7,7 +9,10 @@ from image import Image
 
 class Game:
     def __init__(self):
-        pass
+        self.all_sprites = pygame.sprite.Group()
+        self.active_block_group = pygame.sprite.Group()
+        self.next_block_group = pygame.sprite.Group()
+        self.bottom_group = pygame.sprite.Group()
 
     def start_screen(self, screen, clock):
         intro_text = []
@@ -38,6 +43,11 @@ class Game:
     def run_game(self, screen):
         field = Field()
         field.draw_field(screen)
+        # рандомно выбрать форму
+        block = ActiveBlock("O", self.all_sprites, self.active_block_group)
+        self.all_sprites.draw(screen)
+
+
 
     def terminate(self):
         pygame.quit()

@@ -1,7 +1,9 @@
-from image import Image
-import random
+from constant import Constant
+from square import Square
 
-class Block:
+
+class ActiveBlock:
+
     blocks = {
         "O": [[0, 0, 0, 0],
               [0, 1, 1, 0],
@@ -33,21 +35,14 @@ class Block:
                   [0, 0, 0, 0]]
     }
 
-    color_blocks = {
-        1: Image.load_image(""),
-        2: Image.load_image(""),
-        3: Image.load_image(""),
-        4: Image.load_image(""),
-        5: Image.load_image(""),
-        6: Image.load_image("")
-    }
-
-    def __init__(self, block_type):
+    def __init__(self, block_type, *groups):
         self.matrix = self.blocks[block_type]
-        self.image = self.color_blocks[random.randint(1, 6)]
-
-    def turn(self):
-        self.matrix =  # повернуть матрицу
-
-    def get_image(self):
-        return self.image
+        self.coords = list()
+        for i in range(len(self.blocks[block_type])):
+            for j in range(i):
+                if self.blocks[block_type][i][j] == 1:
+                    self.coords.append([Constant.MARGIN_LEFT + (j+1) * Constant.BLOCK,
+                                              Constant.MARGIN_TOP + (i+1) * Constant.BLOCK])
+                    self.blocks[block_type][i][j] = 2
+        for square in self.coords:
+            Square("O", square[0], square[1], *groups)
