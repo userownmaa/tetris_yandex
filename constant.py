@@ -5,7 +5,7 @@ class Constant:
     BLACK = pygame.Color("black")
     WHITE = pygame.Color("white")
 
-    SIZE = WIDTH, HEIGHT = (600, 600)
+    SIZE = WIDTH, HEIGHT = (600, 500)
     FPS = 60
     BLOCK = 20
     FIELD_WIDTH, FIELD_HEIGHT = 10, 20
