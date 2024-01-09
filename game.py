@@ -1,7 +1,7 @@
-import os
 import sys
 import pygame
 from constant import Constant
+from field import Field
 from image import Image
 
 
@@ -35,8 +35,9 @@ class Game:
             pygame.display.flip()
             clock.tick(Constant.FPS)
 
-    def run_game(self):
-        pass
+    def run_game(self, screen):
+        field = Field()
+        field.draw_field(screen)
 
     def terminate(self):
         pygame.quit()

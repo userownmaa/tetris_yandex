@@ -7,10 +7,11 @@ pygame.init()
 screen = pygame.display.set_mode(Constant.SIZE)
 clock = pygame.time.Clock()
 pygame.display.set_caption("TETRIS")
+game = Game()
 
 
 def main():
-    # Game.start_screen(screen, clock)
+    # game.start_screen(screen, clock)
     running = True
     while running:
         clock.tick(Constant.FPS)
@@ -18,9 +19,9 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        Game.run_game()
+        game.run_game(screen)
         pygame.display.flip()
-    Game.terminate()
+    game.terminate()
 
 
 if __name__ == '__main__':
