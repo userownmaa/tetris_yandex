@@ -1,4 +1,6 @@
 import sys
+import random
+
 import pygame
 
 from active_block import ActiveBlock
@@ -8,6 +10,9 @@ from image import Image
 
 
 class Game:
+
+    blocks = ["O", "T", "L", "I", "Z", "Z_rev", "L_rev"]
+
     def __init__(self):
         self.all_sprites = pygame.sprite.Group()
         self.active_block_group = pygame.sprite.Group()
@@ -43,10 +48,9 @@ class Game:
     def run_game(self, screen):
         field = Field()
         field.draw_field(screen)
-        # рандомно выбрать форму
-        block = ActiveBlock("I", self.all_sprites, self.active_block_group)
+        i = random.randint(0, 6)
+        block = ActiveBlock(self.blocks[4], self.all_sprites, self.active_block_group)
         self.all_sprites.draw(screen)
-
 
 
     def terminate(self):
