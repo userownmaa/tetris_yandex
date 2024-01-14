@@ -78,9 +78,12 @@ class Game:
                 self.next_block = NextBLock(self.next_block_type, self.next_color, self.all_sprites,
                                             self.next_block_group)
             if self.block.is_at_bottom(self.active_block_group, self.bottom_group):
-                self.block.move_back(self.active_block_group)
+                self.block.move_up(self.active_block_group)
                 self.block.stop(self.active_block_group, self.bottom_group)
-
+            if self.block.is_out_of_border() == "R":
+                self.block.move_side("L", self.active_block_group)
+            elif self.block.is_out_of_border() == "L":
+                self.block.move_side("R", self.active_block_group)
 
             self.all_sprites.draw(screen)
             return True

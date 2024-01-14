@@ -23,7 +23,7 @@ class Square(pygame.sprite.Sprite):
     def move_down(self, x, y):
         self.rect = self.rect.move(x, y)
 
-    def move_back(self, x, y):
+    def move_up(self, x, y):
         self.rect = self.rect.move(x, y)
 
     def move_right(self, x, y):
