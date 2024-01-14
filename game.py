@@ -23,6 +23,9 @@ class Game:
         self.next_color = random.randint(1, 6)
         self.next_block_type = random.choice(self.blocks)
         self.next_block = NextBLock(self.next_block_type, self.next_color, self.all_sprites, self.next_block_group)
+        self.game_speed = 700
+        self.GAME_UPDATE = pygame.USEREVENT
+        pygame.time.set_timer(self.GAME_UPDATE, self.game_speed)
 
     def start_screen(self, screen, clock):
         intro_text = []
@@ -53,9 +56,18 @@ class Game:
     def run_game(self, screen):
 
         while True:
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return False
+                if event.type == pygame.USEREVENT:
+                    self.block.move_down(self.active_block_group)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        self.block.move_side("L", self.active_block_group)
+                    if event.key == pygame.K_RIGHT:
+                        self.block.move_side("R", self.active_block_group)
+
             field = Field()
             field.draw_field(screen)
             if not self.active_block_group:
@@ -66,9 +78,9 @@ class Game:
                 self.next_block = NextBLock(self.next_block_type, self.next_color, self.all_sprites,
                                             self.next_block_group)
             if self.block.is_at_bottom(self.active_block_group, self.bottom_group):
+                self.block.move_back(self.active_block_group)
                 self.block.stop(self.active_block_group, self.bottom_group)
-            else:
-                self.block.fall(self.active_block_group)
+
 
             self.all_sprites.draw(screen)
             return True

@@ -20,7 +20,10 @@ class Square(pygame.sprite.Sprite):
         self.image = self.color_blocks[color]
         self.rect = self.image.get_rect().move(x, y)
 
-    def fall(self, x, y):
+    def move_down(self, x, y):
+        self.rect = self.rect.move(x, y)
+
+    def move_back(self, x, y):
         self.rect = self.rect.move(x, y)
 
     def move_right(self, x, y):

@@ -37,14 +37,15 @@ class Constant:
     WHITE = pygame.Color("white")
 
     SIZE = WIDTH, HEIGHT = (600, 500)
-    FPS = 1
+    FPS = 50
+    # SIDE_SPEED = 0.15
     BLOCK = 20
     FIELD_WIDTH, FIELD_HEIGHT = 10, 20
     # MARGIN_LEFT = (WIDTH - FIELD_WIDTH * BLOCK) // 2
     MARGIN_LEFT = 10
     # MARGIN_TOP = HEIGHT - (FIELD_HEIGHT * BLOCK) - 20
     MARGIN_TOP = 4
-    BOTTOM_BORDER = 23
+    BOTTOM_BORDER = 24
     # RIGHT_BORDER = WIDTH - MARGIN_LEFT
     RIGHT_BORDER = 20
     # LEFT_BORDER = WIDTH - MARGIN_LEFT - FIELD_WIDTH  # - BLOCK
@@ -56,6 +57,8 @@ class Constant:
 
     DOWN_X = 0
     DOWN_Y = 20
+    UP_X = 0
+    UP_Y = -20
     LEFT_X = -20
     LEFT_Y = 0
     RIGHT_X = 20
