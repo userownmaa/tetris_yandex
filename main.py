@@ -16,10 +16,7 @@ def main():
     while running:
         clock.tick(Constant.FPS)
         screen.fill(Constant.BLACK)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-        game.run_game(screen)
+        running = game.run_game(screen)
         pygame.display.flip()
     # <- финальное окно с итогами
     game.terminate()

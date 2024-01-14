@@ -1,5 +1,7 @@
+from constant import Constant
 from square import Square
+
+
 class NextBLock:
-    def __init__(self, block_type):
-        self.matrix =
-        self.block = Square.blocks[block_type]
+    def __init__(self, block_type, color, *groups):
+        pass

@@ -11,8 +11,8 @@ class Field:
     def draw_field(self, screen):
         for y in range(Constant.FIELD_HEIGHT):
             for x in range(Constant.FIELD_WIDTH):
-                pygame.draw.rect(screen, Constant.WHITE, (Constant.MARGIN_LEFT + x * Constant.BLOCK,
-                                                          Constant.MARGIN_TOP + y * Constant.BLOCK,
+                pygame.draw.rect(screen, Constant.WHITE, (Constant.MARGIN_LEFT * Constant.BLOCK + x * Constant.BLOCK,
+                                                          Constant.MARGIN_TOP * Constant.BLOCK + y * Constant.BLOCK,
                                                           Constant.BLOCK, Constant.BLOCK), 1)
 
     def add_block(self):

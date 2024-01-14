@@ -1,4 +1,7 @@
+import copy
 import random
+
+import pygame
 
 from constant import Constant
 from square import Square
@@ -6,46 +9,41 @@ from square import Square
 
 class ActiveBlock:
 
-    blocks = {
-        "O": [[0, 0, 0, 0],
-              [0, 1, 1, 0],
-              [0, 1, 1, 0],
-              [0, 0, 0, 0]],
-        "T": [[0, 0, 0, 0],
-              [0, 1, 0, 0],
-              [0, 1, 1, 0],
-              [0, 1, 0, 0]],
-        "I": [[0, 0, 0, 0],
-              [1, 1, 1, 1],
-              [0, 0, 0, 0],
-              [0, 0, 0, 0]],
-        "L": [[0, 0, 0, 0],
-              [0, 1, 1, 0],
-              [0, 1, 0, 0],
-              [0, 1, 0, 0]],
-        "Z": [[0, 0, 0, 0],
-              [1, 1, 0, 0],
-              [0, 1, 1, 0],
-              [0, 0, 0, 0]],
-        "Z_rev": [[0, 0, 0, 0],
-                  [0, 1, 1, 0],
-                  [1, 1, 0, 0],
-                  [0, 0, 0, 0]],
-        "L_rev": [[0, 0, 0, 0],
-                  [0, 1, 1, 0],
-                  [0, 0, 1, 0],
-                  [0, 0, 1, 0]]
-    }
-
-    def __init__(self, block_type, *groups):
-        self.matrix = self.blocks[block_type]
+    def __init__(self, block_type, color, *groups):
+        matrix = copy.deepcopy(Constant.BLOCKS_MATRIX[block_type])
+        self.color = color
         self.coords = list()
-        self.color = random.randint(1, 6)
-        for i in range(len(self.blocks[block_type])):
-            for j in range(len(self.blocks[block_type][i])):
-                if self.blocks[block_type][i][j] == 1:
-                    self.coords.append([Constant.START_X + j * Constant.BLOCK,
-                                        Constant.START_Y + i * Constant.BLOCK])
-                    self.blocks[block_type][i][j] = 2
+        for i in range(len(matrix)):
+            for j in range(len(matrix[i])):
+                if matrix[i][j] == 1:
+                    self.coords.append([Constant.START_X + j,
+                                        Constant.START_Y + i])
+                    matrix[i][j] = 2
         for square in self.coords:
-            Square(block_type, square[0], square[1], self.color, *groups)
+            Square(square[0] * Constant.BLOCK, square[1] * Constant.BLOCK, self.color, *groups)
+
+    def turn(self):
+        pass
+
+    def fall(self, active_block_group):
+        for sprite in active_block_group:
+            sprite.fall(Constant.DOWN_X, Constant.DOWN_Y)
+        for pos in self.coords:
+            pos[0] += Constant.DOWN_X // Constant.BLOCK
+            pos[1] += Constant.DOWN_Y // Constant.BLOCK
+
+    def stop(self, active_block_group, bottom_group):
+        for sprite in active_block_group:
+            active_block_group.remove(sprite)
+            bottom_group.add(sprite)
+
+    def is_at_bottom(self, active_block_group, bottom_group):
+        for pos in self.coords:
+            if pos[1] == Constant.BOTTOM_BORDER:
+                return True
+        for sprite in active_block_group:
+            if pygame.sprite.spritecollideany(sprite, bottom_group):
+                return True
+        return False
+
+
