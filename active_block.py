@@ -10,17 +10,15 @@ from square import Square
 class ActiveBlock:
 
     def __init__(self, block_type, color, *groups):
-        matrix = copy.deepcopy(Constant.BLOCKS_MATRIX[block_type])
+        self.block_type = block_type
         self.color = color
-        self.coords = list()
-        for i in range(len(matrix)):
-            for j in range(len(matrix[i])):
-                if matrix[i][j] == 1:
-                    self.coords.append([Constant.START_X + j,
-                                        Constant.START_Y + i])
-                    matrix[i][j] = 2
+        self.rotation = 0
+        self.coords = copy.deepcopy(Constant.BLOCKS_START_POSITION[block_type])
+        for c in self.coords:
+            c[0] += 13
+            c[1] += 3
         for square in self.coords:
-            Square(square[0] * Constant.BLOCK, square[1] * Constant.BLOCK, self.color, *groups)
+            Square(square[0], square[1], self.color, *groups)
 
     def move_side(self, direction, active_block_group):
         if direction == "L":
@@ -42,8 +40,22 @@ class ActiveBlock:
             sprite.move_up(Constant.UP_X, Constant.UP_Y)
         self.update_coords(Constant.DOWN_X, Constant.DOWN_Y)
 
-    def rotate(self):
-        pass
+    def rotate(self, active_block_group):
+        self.rotation += 1
+        if self.rotation > 4:
+            self.rotation = 1
+        i = 0
+        for sprite in active_block_group:
+            if self.rotation == 4:
+                x = Constant.BLOCKS_POSITION_1[self.block_type][i][0]
+                y = Constant.BLOCKS_POSITION_1[self.block_type][i][1]
+                sprite.rotate(x * Constant.BLOCK, y * Constant.BLOCK)
+                i += 1
+            if self.rotation == 1:
+                x = Constant.BLOCKS_POSITION_2[self.block_type][i][0]
+                y = Constant.BLOCKS_POSITION_2[self.block_type][i][1]
+                sprite.rotate(x * Constant.BLOCK, y * Constant.BLOCK)
+                i += 1
 
     def stop(self, active_block_group, bottom_group):
         for sprite in active_block_group:
@@ -51,11 +63,13 @@ class ActiveBlock:
             bottom_group.add(sprite)
 
     def is_at_bottom(self, active_block_group, bottom_group):
-        for pos in self.coords:
-            if pos[1] == Constant.BOTTOM_BORDER:
-                return True
+        # for pos in self.coords:
+        #     if pos[1] == Constant.BOTTOM_BORDER:
+        #         return True
         for sprite in active_block_group:
             if pygame.sprite.spritecollideany(sprite, bottom_group):
+                return True
+            if sprite.get_position()[1] == Constant.BOTTOM_BORDER:
                 return True
         return False
 
