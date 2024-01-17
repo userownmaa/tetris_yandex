@@ -64,6 +64,7 @@ class Game:
                     return False
                 if event.type == pygame.USEREVENT:
                     self.block.move_down(self.active_block_group)
+                    # self.block.rotate(self.active_block_group)
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         self.block.move_side("L", self.active_block_group)
@@ -85,9 +86,9 @@ class Game:
                 # self.field.add_block(self.active_block_group)
                 self.block.stop(self.active_block_group, self.bottom_group)
                 # self.field.is_row_completed(self.bottom_group)
-            if self.block.is_out_of_border() == "R":
+            if self.block.is_out_of_border(self.active_block_group) == "R":
                 self.block.move_side("L", self.active_block_group)
-            elif self.block.is_out_of_border() == "L":
+            elif self.block.is_out_of_border(self.active_block_group) == "L":
                 self.block.move_side("R", self.active_block_group)
 
             self.all_sprites.draw(screen)
