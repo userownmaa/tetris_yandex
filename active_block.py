@@ -12,11 +12,11 @@ class ActiveBlock:
     def __init__(self, block_type, color, *groups):
         self.block_type = block_type
         self.color = color
-        self.rotation = 0
+        self.rotation = 1
         self.coords = copy.deepcopy(Constant.BLOCKS_START_POSITION[block_type])
         for c in self.coords:
-            c[0] += 13
-            c[1] += 3
+            c[0] += Constant.START_X
+            c[1] += Constant.START_Y
         for square in self.coords:
             Square(square[0], square[1], self.color, *groups)
 
@@ -41,9 +41,6 @@ class ActiveBlock:
         self.update_coords(Constant.DOWN_X, Constant.DOWN_Y)
 
     def rotate(self, active_block_group):
-        self.rotation += 1
-        if self.rotation > 4:
-            self.rotation = 1
         i = 0
         for sprite in active_block_group:
             if self.rotation == 4:
@@ -56,6 +53,19 @@ class ActiveBlock:
                 y = Constant.BLOCKS_POSITION_2[self.block_type][i][1]
                 sprite.rotate(x * Constant.BLOCK, y * Constant.BLOCK)
                 i += 1
+            if self.rotation == 2:
+                x = Constant.BLOCKS_POSITION_3[self.block_type][i][0]
+                y = Constant.BLOCKS_POSITION_3[self.block_type][i][1]
+                sprite.rotate(x * Constant.BLOCK, y * Constant.BLOCK)
+                i += 1
+            if self.rotation == 3:
+                x = Constant.BLOCKS_POSITION_4[self.block_type][i][0]
+                y = Constant.BLOCKS_POSITION_4[self.block_type][i][1]
+                sprite.rotate(x * Constant.BLOCK, y * Constant.BLOCK)
+                i += 1
+        self.rotation += 1
+        if self.rotation > 4:
+            self.rotation = 1
 
     def stop(self, active_block_group, bottom_group):
         for sprite in active_block_group:
@@ -73,13 +83,19 @@ class ActiveBlock:
                 return True
         return False
 
-    def is_out_of_border(self):
-        for pos in self.coords:
-            if pos[0] == Constant.RIGHT_BORDER:
+    def is_out_of_border(self, active_block_group):
+        for sprite in active_block_group:
+            if sprite.get_position()[0] == Constant.RIGHT_BORDER:
                 return "R"
-            elif pos[0] == Constant.LEFT_BORDER:
+            elif sprite.get_position()[0] == Constant.LEFT_BORDER:
                 return "L"
         return None
+        # for pos in self.coords:
+        #     if pos[0] == Constant.RIGHT_BORDER:
+        #         return "R"
+        #     elif pos[0] == Constant.LEFT_BORDER:
+        #         return "L"
+        # return None
 
     def update_coords(self, x, y):
         for pos in self.coords:
