@@ -25,7 +25,7 @@ class Game:
         self.next_color = random.randint(1, 6)
         self.next_block_type = random.choice(self.blocks)
         self.next_block = NextBLock(self.next_block_type, self.next_color, self.all_sprites, self.next_block_group)
-        self.game_speed = 5000
+        self.game_speed = 700
         self.GAME_UPDATE = pygame.USEREVENT
         pygame.time.set_timer(self.GAME_UPDATE, self.game_speed)
 
@@ -64,7 +64,6 @@ class Game:
                     return False
                 if event.type == pygame.USEREVENT:
                     self.block.move_down(self.active_block_group)
-                    # self.block.rotate(self.active_block_group)
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         self.block.move_side("L", self.active_block_group)
@@ -74,6 +73,7 @@ class Game:
                         self.block.rotate(self.active_block_group)
 
             self.field.draw_field(screen)
+            self.field.draw_frame(screen, self.next_block_type)
             if not self.active_block_group:
                 self.block = ActiveBlock(self.next_block_type, self.next_color, self.all_sprites,
                                          self.active_block_group)
@@ -83,13 +83,15 @@ class Game:
                                             self.next_block_group)
             if self.block.is_at_bottom(self.active_block_group, self.bottom_group):
                 self.block.move_up(self.active_block_group)
-                # self.field.add_block(self.active_block_group)
                 self.block.stop(self.active_block_group, self.bottom_group)
-                # self.field.is_row_completed(self.bottom_group)
+                self.next_block.close(self.next_block_group)
             if self.block.is_out_of_border(self.active_block_group) == "R":
                 self.block.move_side("L", self.active_block_group)
             elif self.block.is_out_of_border(self.active_block_group) == "L":
                 self.block.move_side("R", self.active_block_group)
+            if self.field.is_row_completed(self.bottom_group):
+                self.field.clear_row(self.bottom_group)
+                self.field.drop_rows(self.bottom_group)
 
             self.all_sprites.draw(screen)
             return True

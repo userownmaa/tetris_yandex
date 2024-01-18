@@ -19,8 +19,8 @@ class Square(pygame.sprite.Sprite):
     def __init__(self, x, y, color, *groups):
         super().__init__(*groups)
         self.image = self.color_blocks[color]
-        self.rect = self.image.get_rect().move(x * Constant.BLOCK, y * Constant.BLOCK)
-        self.coords = self.x, self.y = x, y
+        self.rect = self.image.get_rect().move(x, y)
+        self.coords = self.x, self.y = x // Constant.BLOCK, y // Constant.BLOCK
 
     def move_down(self, x, y):
         self.rect = self.rect.move(x, y)

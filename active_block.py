@@ -18,7 +18,7 @@ class ActiveBlock:
             c[0] += Constant.START_X
             c[1] += Constant.START_Y
         for square in self.coords:
-            Square(square[0], square[1], self.color, *groups)
+            Square(square[0] * Constant.BLOCK, square[1] * Constant.BLOCK, self.color, *groups)
 
     def move_side(self, direction, active_block_group):
         if direction == "L":
@@ -73,9 +73,6 @@ class ActiveBlock:
             bottom_group.add(sprite)
 
     def is_at_bottom(self, active_block_group, bottom_group):
-        # for pos in self.coords:
-        #     if pos[1] == Constant.BOTTOM_BORDER:
-        #         return True
         for sprite in active_block_group:
             if pygame.sprite.spritecollideany(sprite, bottom_group):
                 return True
@@ -90,12 +87,6 @@ class ActiveBlock:
             elif sprite.get_position()[0] == Constant.LEFT_BORDER:
                 return "L"
         return None
-        # for pos in self.coords:
-        #     if pos[0] == Constant.RIGHT_BORDER:
-        #         return "R"
-        #     elif pos[0] == Constant.LEFT_BORDER:
-        #         return "L"
-        # return None
 
     def update_coords(self, x, y):
         for pos in self.coords:
