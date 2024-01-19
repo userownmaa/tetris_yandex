@@ -4,7 +4,6 @@ import sys
 import pygame
 
 from active_block import ActiveBlock
-from bottom import Bottom
 from constant import Constant
 from field import Field
 from image import Image
