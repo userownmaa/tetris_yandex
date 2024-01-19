@@ -15,7 +15,6 @@ class Database:
         data = list(map(int, data))
         return data
 
-
     def add_result(self, res):
         data = self.get_data()
         if len(data) > 3:
