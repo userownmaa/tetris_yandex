@@ -111,10 +111,13 @@ class Game:
             if self.field.is_row_completed(self.bottom_group):
                 self.field.clear_row(self.bottom_group)
                 self.score += self.field.get_score()
-                # print(self.score, "*****", self.level, "*****", self.game_speed)
-                if self.score % 10 == 0:
-                    self.level += 1
-                    self.game_speed -= 100
+
+                for level in range(1, 8):
+                    if self.score // 10 == level - 1:
+                        self.level = level
+                        self.game_speed -= 100
+                    print(self.level, self.score, self.game_speed)
+
             if self.block.is_over(self.active_block_group, self.bottom_group):
                 return False
 
