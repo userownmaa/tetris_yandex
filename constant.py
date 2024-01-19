@@ -36,7 +36,7 @@ class Constant:
     NEXT_BLOCKS_START_POSITION = {
         "O": [[80, 230], [100, 230], [80, 250], [100, 250]],
         "T": [[80, 220], [80, 240], [100, 240], [80, 260]],
-        "I": [[60, 230], [80, 230], [100, 230], [120, 230]],
+        "I": [[60, 240], [80, 240], [100, 240], [120, 240]],
         "L": [[80, 220], [100, 220], [80, 240], [80, 260]],
         "Z": [[70, 230], [90, 230], [90, 250], [110, 250]],
         "Z_rev": [[70, 250], [90, 250], [90, 230], [110, 230]],
@@ -94,12 +94,10 @@ class Constant:
     WHITE = pygame.Color("white")
 
     SIZE = WIDTH, HEIGHT = (600, 500)
-    FPS = 50
+    FPS = 40
     # SIDE_SPEED = 0.15
     BLOCK = 20
     FIELD_WIDTH, FIELD_HEIGHT = 10, 20
-    SMALL_FIELD_WIDTH, SMALL_FIELD_HEIGHT = 120, 120
-    SMALL_FIELD_X, SMALL_FIELD_Y = 2, 9.5
     # MARGIN_LEFT = (WIDTH - FIELD_WIDTH * BLOCK) // 2
     MARGIN_LEFT = 10
     # MARGIN_TOP = HEIGHT - (FIELD_HEIGHT * BLOCK) - 20

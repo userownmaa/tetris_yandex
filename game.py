@@ -20,6 +20,9 @@ class Game:
         self.active_block_group = pygame.sprite.Group()
         self.next_block_group = pygame.sprite.Group()
         self.bottom_group = pygame.sprite.Group()
+        self.score = 0
+        self.level = 1
+        self.game = True
         self.field = Field()
         self.block = ActiveBlock(random.choice(self.blocks), random.randint(1, 6), self.all_sprites, self.active_block_group)
         self.next_color = random.randint(1, 6)
@@ -71,9 +74,26 @@ class Game:
                         self.block.move_side("R", self.active_block_group)
                     if event.key == pygame.K_UP:
                         self.block.rotate(self.active_block_group)
+                    if event.key == pygame.K_SPACE:
+                        self.block.drop(self.active_block_group, self.bottom_group)
 
             self.field.draw_field(screen)
             self.field.draw_frame(screen, self.next_block_type)
+
+            font = pygame.font.Font(None, 22)
+            text = font.render("Следующая фигура:", True, Constant.WHITE)
+            screen.blit(text, (20, 160))
+            text = font.render("Уровень:", True, Constant.WHITE)
+            screen.blit(text, (440, 140))
+            text = font.render("Счёт:", True, Constant.WHITE)
+            screen.blit(text, (440, 280))
+
+            font = pygame.font.Font(None, 35)
+            text = font.render(str(self.level), True, Constant.WHITE)
+            screen.blit(text, (450, 170))
+            text = font.render(str(self.score), True, Constant.WHITE)
+            screen.blit(text, (450, 310))
+
             if not self.active_block_group:
                 self.block = ActiveBlock(self.next_block_type, self.next_color, self.all_sprites,
                                          self.active_block_group)
@@ -91,9 +111,16 @@ class Game:
                 self.block.move_side("R", self.active_block_group)
             if self.field.is_row_completed(self.bottom_group):
                 self.field.clear_row(self.bottom_group)
-                self.field.drop_rows(self.bottom_group)
+                self.score += self.field.get_score()
+                # print(self.score, "*****", self.level, "*****", self.game_speed)
+                if self.score % 10 == 0:
+                    self.level += 1
+                    self.game_speed -= 100
+            if self.block.is_over(self.active_block_group, self.bottom_group):
+                return False
 
             self.all_sprites.draw(screen)
+
             return True
 
     def terminate(self):

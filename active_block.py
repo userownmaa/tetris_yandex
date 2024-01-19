@@ -40,6 +40,10 @@ class ActiveBlock:
             sprite.move_up(Constant.UP_X, Constant.UP_Y)
         self.update_coords(Constant.DOWN_X, Constant.DOWN_Y)
 
+    def drop(self, active_block_group, bottom_group):
+        while not self.is_at_bottom(active_block_group, bottom_group):
+            self.move_down(active_block_group)
+
     def rotate(self, active_block_group):
         i = 0
         for sprite in active_block_group:
@@ -88,10 +92,23 @@ class ActiveBlock:
                 return "L"
         return None
 
+    def is_over(self, active_block_group, bottom_group):
+        cond1 = False
+        cond2 = False
+        for sprite in active_block_group:
+            if sprite.get_position()[1] <= 4:
+                cond1 = True
+            if pygame.sprite.spritecollideany(sprite, bottom_group):
+                cond2 = True
+        if cond1 and cond2:
+            return True
+        return False
+
     def update_coords(self, x, y):
         for pos in self.coords:
             pos[0] += x // Constant.BLOCK
             pos[1] += y // Constant.BLOCK
+
 
 
 

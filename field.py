@@ -6,7 +6,7 @@ from constant import Constant
 class Field:
 
     def __init__(self):
-        self.n = 0
+        self.score = 0
         self.completed = list()
         self.matrix = [[0] * Constant.FIELD_WIDTH for i in range(Constant.FIELD_HEIGHT)]
 
@@ -16,9 +16,13 @@ class Field:
                 pygame.draw.rect(screen, Constant.WHITE, (Constant.MARGIN_LEFT * Constant.BLOCK + x * Constant.BLOCK,
                                                           Constant.MARGIN_TOP * Constant.BLOCK + y * Constant.BLOCK,
                                                           Constant.BLOCK, Constant.BLOCK), 1)
-        pygame.draw.rect(screen, Constant.WHITE, (Constant.SMALL_FIELD_X * Constant.BLOCK,
-                                                  Constant.SMALL_FIELD_Y * Constant.BLOCK,
-                                                  Constant.SMALL_FIELD_WIDTH, Constant.SMALL_FIELD_HEIGHT), 1)
+        pygame.draw.rect(screen, Constant.WHITE, (Constant.MARGIN_LEFT * Constant.BLOCK - 1,
+                                                  Constant.MARGIN_TOP * Constant.BLOCK - 1,
+                                                  Constant.FIELD_WIDTH * Constant.BLOCK,
+                                                  Constant.FIELD_HEIGHT * Constant.BLOCK), 1)
+        pygame.draw.rect(screen, Constant.WHITE, (2 * Constant.BLOCK, 9.5 * Constant.BLOCK, 120, 120), 1)
+        pygame.draw.rect(screen, Constant.WHITE, (22 * Constant.BLOCK, 8 * Constant.BLOCK, 120, 40), 1)
+        pygame.draw.rect(screen, Constant.WHITE, (22 * Constant.BLOCK, 15 * Constant.BLOCK, 120, 40), 1)
 
     def draw_frame(self, screen, block_type):
         for pos in Constant.NEXT_BLOCKS_START_POSITION[block_type]:
@@ -32,8 +36,8 @@ class Field:
         for y in ordinates:
             if ordinates.count(y) >= 10:
                 self.completed.append(y)
-        self.n = len(self.completed)
         if self.completed:
+            self.completed = list(set(self.completed))
             return True
         return False
 
@@ -42,14 +46,12 @@ class Field:
             for sprite in bottom_group:
                 if sprite.get_position()[1] == y:
                     sprite.kill()
-
-    def drop_rows(self, bottom_group):
         for sprite in bottom_group:
             x, y = sprite.get_position()[0], sprite.get_position()[1]
             if y <= max(self.completed):
-                sprite.move_down(x * Constant.BLOCK, y * Constant.BLOCK * self.n)
+                sprite.move_down(0, len(self.completed) * Constant.BLOCK)
+        self.score = len(self.completed)
+        self.completed = []
 
-
-
-
-
+    def get_score(self):
+        return self.score
