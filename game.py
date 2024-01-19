@@ -115,8 +115,8 @@ class Game:
                 for level in range(1, 8):
                     if self.score // 10 == level - 1:
                         self.level = level
-                        self.game_speed -= 100
-                    print(self.level, self.score, self.game_speed)
+                        self.game_speed = abs(level * 100 - 800)
+                        print(self.level, self.score, self.game_speed)
 
             if self.block.is_over(self.active_block_group, self.bottom_group):
                 return False
