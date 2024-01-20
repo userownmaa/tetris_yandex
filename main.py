@@ -11,7 +11,7 @@ game = Game()
 
 
 def main():
-    # game.start_screen(screen, clock)
+    game.start_screen(screen, clock)
     running = True
     while running:
         clock.tick(Constant.FPS)

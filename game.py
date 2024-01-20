@@ -29,23 +29,25 @@ class Game:
         self.next_block = NextBLock(self.next_block_type, self.next_color, self.all_sprites, self.next_block_group)
         self.game_speed = 700
         self.GAME_UPDATE = pygame.USEREVENT
+        self.image = Image()
         pygame.time.set_timer(self.GAME_UPDATE, self.game_speed)
 
     def start_screen(self, screen, clock):
         intro_text = []
 
-        fon = pygame.transform.scale(Image.load_image(""), (Constant.WIDTH, Constant.HEIGHT))
+        fon = pygame.transform.scale(self.image.load_image("fon2.jpg"), (Constant.WIDTH, Constant.HEIGHT))
         screen.blit(fon, (0, 0))
         font = pygame.font.Font(None, 30)
-        text_coord = 50
-        for line in intro_text:
-            string_rendered = font.render(line, 1, Constant.BLACK)
-            intro_rect = string_rendered.get_rect()
-            text_coord += 10
-            intro_rect.top = text_coord
-            intro_rect.x = 10
-            text_coord += intro_rect.height
-            screen.blit(string_rendered, intro_rect)
+        text = font.render("Нажмите, чтобы начать", True, Constant.WHITE)
+        screen.blit(text, (300, 400))
+        # for line in intro_text:
+        #     string_rendered = font.render(line, 1, Constant.BLACK)
+        #     intro_rect = string_rendered.get_rect()
+        #     text_coord += 10
+        #     intro_rect.top = text_coord
+        #     intro_rect.x = 10
+        #     text_coord += intro_rect.height
+        #     screen.blit(string_rendered, intro_rect)
 
         while True:
             for event in pygame.event.get():
