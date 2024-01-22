@@ -36,10 +36,10 @@ class Game:
 
     def start_screen(self, screen, clock):
 
-        fon = pygame.transform.scale(self.image.load_image("fon2.jpg"), (Constant.WIDTH, Constant.HEIGHT))
+        fon = pygame.transform.scale(self.image.load_image("fon_start.jpg"), (Constant.WIDTH, Constant.HEIGHT))
         screen.blit(fon, (0, 0))
         font = pygame.font.Font(None, 30)
-        text = font.render("Нажмите, чтобы начать", True, Constant.WHITE)
+        text = font.render("Нажмите, чтобы начать...", True, Constant.WHITE)
         screen.blit(text, (300, 400))
 
         while True:
@@ -71,8 +71,8 @@ class Game:
                     if event.key == pygame.K_SPACE:
                         self.block.drop(self.active_block_group, self.bottom_group)
 
-            # fon = pygame.transform.scale(self.image.load_image("fon2.jpg"), (Constant.WIDTH, Constant.HEIGHT))
-            # screen.blit(fon, (0, 0))
+            fon = pygame.transform.scale(self.image.load_image("fon_main.jpg"), (Constant.WIDTH, Constant.HEIGHT))
+            screen.blit(fon, (0, 0))
             self.field.draw_field(screen)
             self.field.draw_frame(screen, self.next_block_type)
 
@@ -122,10 +122,10 @@ class Game:
             return True
 
     def finish_screen(self, screen, clock):
-        fon = pygame.transform.scale(self.image.load_image("fon2.jpg"), (Constant.WIDTH, Constant.HEIGHT))
+        fon = pygame.transform.scale(self.image.load_image("fon_fin.jpg"), (Constant.WIDTH, Constant.HEIGHT))
         screen.blit(fon, (0, 0))
 
-        pygame.draw.rect(screen, Constant.WHITE, (170, 80, 260, 260), 1)
+        pygame.draw.rect(screen, Constant.WHITE, (170, 90, 260, 250), 1)
         self.db.add_result(self.score)
         best_score = self.db.get_result()
         font = pygame.font.Font(None, 30)
