@@ -55,3 +55,11 @@ class Field:
 
     def get_score(self):
         return self.score
+
+    def is_over(self, bottom_group, next_block):
+        type = next_block.get_type()
+        for sprite in bottom_group:
+            for pos in Constant.BLOCKS_START_POSITION[type]:
+                if sprite.get_position()[0] == pos[0] and sprite.get_position()[1] == pos[1]:
+                    return True
+        return False

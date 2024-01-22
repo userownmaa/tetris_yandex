@@ -5,6 +5,7 @@ import pygame
 
 from active_block import ActiveBlock
 from constant import Constant
+from database import Database
 from field import Field
 from image import Image
 from next_block import NextBLock
@@ -30,24 +31,16 @@ class Game:
         self.game_speed = 700
         self.GAME_UPDATE = pygame.USEREVENT
         self.image = Image()
+        self.db = Database()
         pygame.time.set_timer(self.GAME_UPDATE, self.game_speed)
 
     def start_screen(self, screen, clock):
-        intro_text = []
 
         fon = pygame.transform.scale(self.image.load_image("fon2.jpg"), (Constant.WIDTH, Constant.HEIGHT))
         screen.blit(fon, (0, 0))
         font = pygame.font.Font(None, 30)
         text = font.render("Нажмите, чтобы начать", True, Constant.WHITE)
         screen.blit(text, (300, 400))
-        # for line in intro_text:
-        #     string_rendered = font.render(line, 1, Constant.BLACK)
-        #     intro_rect = string_rendered.get_rect()
-        #     text_coord += 10
-        #     intro_rect.top = text_coord
-        #     intro_rect.x = 10
-        #     text_coord += intro_rect.height
-        #     screen.blit(string_rendered, intro_rect)
 
         while True:
             for event in pygame.event.get():
@@ -78,6 +71,8 @@ class Game:
                     if event.key == pygame.K_SPACE:
                         self.block.drop(self.active_block_group, self.bottom_group)
 
+            # fon = pygame.transform.scale(self.image.load_image("fon2.jpg"), (Constant.WIDTH, Constant.HEIGHT))
+            # screen.blit(fon, (0, 0))
             self.field.draw_field(screen)
             self.field.draw_frame(screen, self.next_block_type)
 
@@ -86,7 +81,7 @@ class Game:
             screen.blit(text, (20, 160))
             text = font.render("Уровень:", True, Constant.WHITE)
             screen.blit(text, (440, 140))
-            text = font.render("Счёт:", True, Constant.WHITE)
+            text = font.render("Очки:", True, Constant.WHITE)
             screen.blit(text, (440, 280))
 
             font = pygame.font.Font(None, 35)
@@ -118,14 +113,40 @@ class Game:
                     if self.score // 10 == level - 1:
                         self.level = level
                         self.game_speed = abs(level * 100 - 800)
-                        print(self.level, self.score, self.game_speed)
-
-            if self.block.is_over(self.active_block_group, self.bottom_group):
-                return False
 
             self.all_sprites.draw(screen)
 
+            if self.field.is_over(self.bottom_group, self.next_block):
+                return False
+
             return True
+
+    def finish_screen(self, screen, clock):
+        fon = pygame.transform.scale(self.image.load_image("fon2.jpg"), (Constant.WIDTH, Constant.HEIGHT))
+        screen.blit(fon, (0, 0))
+
+        pygame.draw.rect(screen, Constant.WHITE, (170, 80, 260, 260), 1)
+        self.db.add_result(self.score)
+        best_score = self.db.get_result()
+        font = pygame.font.Font(None, 30)
+        text = font.render("Ваш результат:", True, Constant.WHITE)
+        screen.blit(text, (200, 130))
+        text = font.render("Лучший результат:", True, Constant.WHITE)
+        screen.blit(text, (200, 230))
+
+        font = pygame.font.Font(None, 40)
+        text = font.render(f"{self.score}", True, Constant.WHITE)
+        screen.blit(text, (200, 160))
+        text = font.render(f"{best_score}", True, Constant.WHITE)
+        screen.blit(text, (200, 260))
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return
+            pygame.display.flip()
+            clock.tick(Constant.FPS)
+
 
     def terminate(self):
         pygame.quit()

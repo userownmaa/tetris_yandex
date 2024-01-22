@@ -16,21 +16,12 @@ class Database:
         return data
 
     def add_result(self, res):
+        self.cur.execute("INSERT INTO data(result) VALUES(?)", (res,))
         data = self.get_data()
-        if len(data) > 3:
-            if res > min(data):
-                self.cur.execute("INSERT INTO data(result) VALUES(?)", (res,))
-                self.cur.execute("DELETE FROM data WHERE result = ?", (min(data),))
-        else:
-            self.cur.execute("INSERT INTO data(result) VALUES(?)", (res,))
+        if len(data) > 1 and len(set(data)) > 1:
+            self.cur.execute("DELETE FROM data WHERE result = ?", (min(data),))
         self.con.commit()
 
     def get_result(self):
         data = self.get_data()
-        data.sort(reverse=True)
-        return data
-
-
-d = Database()
-d.add_result(45)
-print(d.get_result())
+        return data[0]

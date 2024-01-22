@@ -18,7 +18,7 @@ def main():
         screen.fill(Constant.BLACK)
         running = game.run_game(screen)
         pygame.display.flip()
-    # <- финальное окно с итогами
+    game.finish_screen(screen, clock)
     game.terminate()
 
 
