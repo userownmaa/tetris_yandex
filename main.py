@@ -1,5 +1,4 @@
 import pygame
-import sys
 from constant import Constant
 from game import Game
 
@@ -23,4 +22,4 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()
