@@ -1,5 +1,4 @@
 import pygame
-import sys
 from constant import Constant
 from game import Game
 
@@ -11,16 +10,16 @@ game = Game()
 
 
 def main():
-    # game.start_screen(screen, clock)
+    game.start_screen(screen, clock)
     running = True
     while running:
         clock.tick(Constant.FPS)
         screen.fill(Constant.BLACK)
         running = game.run_game(screen)
         pygame.display.flip()
-    # <- финальное окно с итогами
+    game.finish_screen(screen, clock)
     game.terminate()
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()

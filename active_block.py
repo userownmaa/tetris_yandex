@@ -1,5 +1,3 @@
-import copy
-
 import pygame
 
 from constant import Constant
@@ -12,32 +10,24 @@ class ActiveBlock:
         self.block_type = block_type
         self.color = color
         self.rotation = 1
-        self.coords = copy.deepcopy(Constant.BLOCKS_START_POSITION[block_type])
-        for c in self.coords:
-            c[0] += Constant.START_X
-            c[1] += Constant.START_Y
-        for square in self.coords:
+        for square in Constant.BLOCKS_START_POSITION[block_type]:
             Square(square[0] * Constant.BLOCK, square[1] * Constant.BLOCK, self.color, *groups)
 
     def move_side(self, direction, active_block_group):
         if direction == "L":
             for sprite in active_block_group:
                 sprite.move_left(Constant.LEFT_X, Constant.LEFT_Y)
-            self.update_coords(Constant.LEFT_X, Constant.LEFT_Y)
         elif direction == "R":
             for sprite in active_block_group:
                 sprite.move_left(Constant.RIGHT_X, Constant.RIGHT_Y)
-            self.update_coords(Constant.RIGHT_X, Constant.RIGHT_Y)
 
     def move_down(self, active_block_group):
         for sprite in active_block_group:
             sprite.move_down(Constant.DOWN_X, Constant.DOWN_Y)
-        self.update_coords(Constant.DOWN_X, Constant.DOWN_Y)
 
     def move_up(self, active_block_group):
         for sprite in active_block_group:
             sprite.move_up(Constant.UP_X, Constant.UP_Y)
-        self.update_coords(Constant.DOWN_X, Constant.DOWN_Y)
 
     def drop(self, active_block_group, bottom_group):
         while not self.is_at_bottom(active_block_group, bottom_group):
@@ -90,24 +80,5 @@ class ActiveBlock:
             elif sprite.get_position()[0] == Constant.LEFT_BORDER:
                 return "L"
         return None
-
-    def is_over(self, active_block_group, bottom_group):
-        cond1 = False
-        cond2 = False
-        for sprite in active_block_group:
-            if sprite.get_position()[1] <= 4:
-                cond1 = True
-            if pygame.sprite.spritecollideany(sprite, bottom_group):
-                cond2 = True
-        if cond1 and cond2:
-            return True
-        return False
-
-    def update_coords(self, x, y):
-        for pos in self.coords:
-            pos[0] += x // Constant.BLOCK
-            pos[1] += y // Constant.BLOCK
-
-
 
 

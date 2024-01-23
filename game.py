@@ -5,6 +5,7 @@ import pygame
 
 from active_block import ActiveBlock
 from constant import Constant
+from database import Database
 from field import Field
 from image import Image
 from next_block import NextBLock
@@ -29,31 +30,29 @@ class Game:
         self.next_block = NextBLock(self.next_block_type, self.next_color, self.all_sprites, self.next_block_group)
         self.game_speed = 700
         self.GAME_UPDATE = pygame.USEREVENT
+        self.image = Image()
+        self.db = Database()
         pygame.time.set_timer(self.GAME_UPDATE, self.game_speed)
 
     def start_screen(self, screen, clock):
-        intro_text = []
 
-        fon = pygame.transform.scale(Image.load_image(""), (Constant.WIDTH, Constant.HEIGHT))
+        fon = pygame.transform.scale(self.image.load_image("fon_start.jpg"), (Constant.WIDTH, Constant.HEIGHT))
         screen.blit(fon, (0, 0))
-        font = pygame.font.Font(None, 30)
-        text_coord = 50
-        for line in intro_text:
-            string_rendered = font.render(line, 1, Constant.BLACK)
-            intro_rect = string_rendered.get_rect()
-            text_coord += 10
-            intro_rect.top = text_coord
-            intro_rect.x = 10
-            text_coord += intro_rect.height
-            screen.blit(string_rendered, intro_rect)
+
+        pygame.draw.rect(screen, Constant.WHITE, (220, 285, 160, 60), 1)
+
+        font = pygame.font.Font(None, 40)
+        text = font.render("Играть", True, Constant.WHITE)
+        screen.blit(text, (255, 300))
 
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.terminate()
-                elif event.type == pygame.KEYDOWN or \
-                        event.type == pygame.MOUSEBUTTONDOWN:
-                    return
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    if 220 <= mouse_x <= 220 + 160 and 285 <= mouse_y <= 285 + 60:
+                        return
             pygame.display.flip()
             clock.tick(Constant.FPS)
 
@@ -76,6 +75,8 @@ class Game:
                     if event.key == pygame.K_SPACE:
                         self.block.drop(self.active_block_group, self.bottom_group)
 
+            fon = pygame.transform.scale(self.image.load_image("fon_main.jpg"), (Constant.WIDTH, Constant.HEIGHT))
+            screen.blit(fon, (0, 0))
             self.field.draw_field(screen)
             self.field.draw_frame(screen, self.next_block_type)
 
@@ -84,7 +85,7 @@ class Game:
             screen.blit(text, (20, 160))
             text = font.render("Уровень:", True, Constant.WHITE)
             screen.blit(text, (440, 140))
-            text = font.render("Счёт:", True, Constant.WHITE)
+            text = font.render("Очки:", True, Constant.WHITE)
             screen.blit(text, (440, 280))
 
             font = pygame.font.Font(None, 35)
@@ -116,14 +117,40 @@ class Game:
                     if self.score // 10 == level - 1:
                         self.level = level
                         self.game_speed = abs(level * 100 - 800)
-                        print(self.level, self.score, self.game_speed)
-
-            if self.block.is_over(self.active_block_group, self.bottom_group):
-                return False
 
             self.all_sprites.draw(screen)
 
+            if self.field.is_over(self.bottom_group, self.next_block):
+                return False
+
             return True
+
+    def finish_screen(self, screen, clock):
+        fon = pygame.transform.scale(self.image.load_image("fon_fin.jpg"), (Constant.WIDTH, Constant.HEIGHT))
+        screen.blit(fon, (0, 0))
+
+        pygame.draw.rect(screen, Constant.WHITE, (170, 90, 260, 250), 1)
+        self.db.add_result(self.score)
+        best_score = self.db.get_result()
+        font = pygame.font.Font(None, 30)
+        text = font.render("Ваш результат:", True, Constant.WHITE)
+        screen.blit(text, (200, 130))
+        text = font.render("Лучший результат:", True, Constant.WHITE)
+        screen.blit(text, (200, 230))
+
+        font = pygame.font.Font(None, 40)
+        text = font.render(f"{self.score}", True, Constant.WHITE)
+        screen.blit(text, (200, 160))
+        text = font.render(f"{best_score}", True, Constant.WHITE)
+        screen.blit(text, (200, 260))
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return
+            pygame.display.flip()
+            clock.tick(Constant.FPS)
+
 
     def terminate(self):
         pygame.quit()

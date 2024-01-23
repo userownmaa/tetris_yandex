@@ -13,3 +13,6 @@ class NextBLock:
         for sprite in next_block_group:
             sprite.kill()
 
+    def get_type(self):
+        return self.block_type
+
