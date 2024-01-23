@@ -38,17 +38,21 @@ class Game:
 
         fon = pygame.transform.scale(self.image.load_image("fon_start.jpg"), (Constant.WIDTH, Constant.HEIGHT))
         screen.blit(fon, (0, 0))
-        font = pygame.font.Font(None, 30)
-        text = font.render("Нажмите, чтобы начать...", True, Constant.WHITE)
-        screen.blit(text, (300, 400))
+
+        pygame.draw.rect(screen, Constant.WHITE, (220, 285, 160, 60), 1)
+
+        font = pygame.font.Font(None, 40)
+        text = font.render("Играть", True, Constant.WHITE)
+        screen.blit(text, (255, 300))
 
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.terminate()
-                elif event.type == pygame.KEYDOWN or \
-                        event.type == pygame.MOUSEBUTTONDOWN:
-                    return
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    if 220 <= mouse_x <= 220 + 160 and 285 <= mouse_y <= 285 + 60:
+                        return
             pygame.display.flip()
             clock.tick(Constant.FPS)
 
