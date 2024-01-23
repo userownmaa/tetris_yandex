@@ -81,4 +81,10 @@ class ActiveBlock:
                 return "L"
         return None
 
+    def check_i(self, active_block_group):
+        for sprite in active_block_group:
+            if sprite.get_position()[1] <= 80:
+                return False
+        return True
+
 

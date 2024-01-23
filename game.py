@@ -71,7 +71,10 @@ class Game:
                     if event.key == pygame.K_RIGHT:
                         self.block.move_side("R", self.active_block_group)
                     if event.key == pygame.K_UP:
-                        self.block.rotate(self.active_block_group)
+                        if self.block.block_type == "I" and self.block.check_i(self.active_block_group):
+                            self.block.rotate(self.active_block_group)
+                        else:
+                            self.block.rotate(self.active_block_group)
                     if event.key == pygame.K_SPACE:
                         self.block.drop(self.active_block_group, self.bottom_group)
 
@@ -117,6 +120,7 @@ class Game:
                     if self.score // 10 == level - 1:
                         self.level = level
                         self.game_speed = abs(level * 100 - 800)
+                        pygame.time.set_timer(self.GAME_UPDATE, self.game_speed)
 
             self.all_sprites.draw(screen)
 
@@ -137,6 +141,8 @@ class Game:
         screen.blit(text, (200, 130))
         text = font.render("Лучший результат:", True, Constant.WHITE)
         screen.blit(text, (200, 230))
+        # text = font.render("Играть заново", True, Constant.WHITE)
+        # screen.blit(text, (230, 400))
 
         font = pygame.font.Font(None, 40)
         text = font.render(f"{self.score}", True, Constant.WHITE)
@@ -147,7 +153,10 @@ class Game:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return
+                    return False
+                elif event.type == pygame.KEYDOWN or \
+                        event.type == pygame.MOUSEBUTTONDOWN:
+                    return True
             pygame.display.flip()
             clock.tick(Constant.FPS)
 
